@@ -9,6 +9,7 @@ class UsuarioController {
 
     async createUser(req, res) { 
         const {nome, email, senha, telefone, restricoes, tipo_usuario} = req.body
+        try{
         const senhaHash = await bcrypt.hash(senha, 8)
         const usuario = await prisma.usuarios.create({
             data: {
@@ -21,6 +22,9 @@ class UsuarioController {
             }
         })
         return res.status(200).json(usuario)
+    }catch(e){
+        return res.status(400).json(`Informação inválida`)
+    }
     }
 
     async login(req,res){
